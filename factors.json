@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "factor_name": "leisure",
+        "icon": "leisure.png"
+    },
+    {
+        "id": 2,
+        "factor_name": "social",
+        "icon": "social.png"
+    },
+    {
+        "id": 3,
+        "factor_name": "relationship",
+        "icon": "relationship.png"
+    },
+    {
+        "id": 4,
+        "factor_name": "sex",
+        "icon": "sex.png"
+    },
+    {
+        "id": 5,
+        "factor_name": "money",
+        "icon": "money.png"
+    },
+    {
+        "id": 6,
+        "factor_name": "exercise",
+        "icon": "exercise.png"
+    },
+    {
+        "id": 7,
+        "factor_name": "health",
+        "icon": "health.png"
+    },
+    {
+        "id": 8,
+        "factor_name": "sleep",
+        "icon": "sleep.png"
+    },
+    {
+        "id": 9,
+        "factor_name": "exercise",
+        "icon": "exercise.png"
+    },
+    {
+        "id": 10,
+        "factor_name": "food",
+        "icon": "food.png"
+    },
+    {
+        "id": 11,
+        "factor_name": "drugs/alcohol",
+        "icon": "wineglass.png"
+    },
+    {
+        "id": 12,
+        "factor_name": "work",
+        "icon": "work.png"
+    }
+]

@@ -1,0 +1,75 @@
+[
+    {
+        "id": 1,
+        "mood_name": "happy",
+        "mood_image": "happy.png",
+        "value": 1.0
+    },
+    {
+        "id": 2,
+        "mood_name": "sad",
+        "mood_image": "sad.png",
+        "value": 0.0
+    },
+    {
+        "id": 3,
+        "mood_name": "angry",
+        "mood_image": "angry.png",
+        "value": 0.0
+    },
+    {
+        "id": 4,
+        "mood_name": "calm",
+        "mood_image": "calm.png",
+        "value": 1.0
+    },
+    {
+        "id": 5,
+        "mood_name": "excited",
+        "mood_image": "excited.png",
+        "value": 0.75
+    },
+    {
+        "id": 6,
+        "mood_name": "anxious",
+        "mood_image": "anxious.png",
+        "value": 0.25
+    },
+    {
+        "id": 7,
+        "mood_name": "okay",
+        "mood_image": "okay.png",
+        "value": 0.5
+    },
+    {
+        "id": 8,
+        "mood_name": "bored",
+        "mood_image": "bored.png",
+        "value": 0.5
+    },
+    {
+        "id": 9,
+        "mood_name": "tired",
+        "mood_image": "tired.png",
+        "value": 0.25
+    },
+    {
+        "id": 10,
+        "mood_name": "overwhelmed",
+        "mood_image": "overwhelmed.png",
+        "value": 0.25
+    },
+    {
+        "id": 11,
+        "mood_name": "stressed",
+        "mood_image": "stressed.png",
+        "value": 0.0
+    },
+    {
+        "id": 12,
+        "mood_name": "lonely",
+        "mood_image": "lonely.png",
+        "value": 0.0
+    }
+    
+]
