@@ -4,21 +4,22 @@ import * as Notifications from 'expo-notifications';
 
 export async function schedulePushNotification(trigger_time) {
 
-    console.log("Scheduling notification");
-    const time_difference = trigger_time - new Date();
+  console.log("Scheduling notification");
+  const time_difference = trigger_time - new Date();
 
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "How are you feeling today?",
-        body: "It's time to log your mood.",
-      },
-      trigger: { 
-          seconds: time_difference,
-          repeats: true,
-      },
-    });
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "How are you feeling today?",
+      body: "It's time to log your mood.",
+    },
+    trigger: {
+      type: SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: time_difference,
+      repeats: true,
+    },
+  });
 
-    console.log("Notification scheduled");
+  console.log("Notification scheduled");
 }
 
 export async function registerForPushNotificationsAsync() {

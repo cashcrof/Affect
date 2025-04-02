@@ -2,61 +2,66 @@
     {
         "id": 1,
         "factor_name": "leisure",
-        "icon": "leisure.png"
+        "icon": "0x1F9D8"
     },
     {
         "id": 2,
         "factor_name": "social",
-        "icon": "social.png"
+        "icon": "0x1F465"
     },
     {
         "id": 3,
         "factor_name": "relationship",
-        "icon": "relationship.png"
+        "icon": "0x2764"
     },
     {
         "id": 4,
         "factor_name": "sex",
-        "icon": "sex.png"
+        "icon": "0x1F4A6"
     },
     {
         "id": 5,
         "factor_name": "money",
-        "icon": "money.png"
+        "icon": "0x1F4B5"
     },
     {
         "id": 6,
         "factor_name": "exercise",
-        "icon": "exercise.png"
+        "icon": "0x1F3C3"
     },
     {
         "id": 7,
         "factor_name": "health",
-        "icon": "health.png"
+        "icon": "0x1FA7A"
     },
     {
         "id": 8,
         "factor_name": "sleep",
-        "icon": "sleep.png"
+        "icon": "0x1F4A4"
     },
     {
         "id": 9,
-        "factor_name": "exercise",
-        "icon": "exercise.png"
+        "factor_name": "screen time",
+        "icon": "0x1F4F1"
     },
     {
         "id": 10,
         "factor_name": "food",
-        "icon": "food.png"
+        "icon": "0x1F354"
     },
     {
         "id": 11,
-        "factor_name": "drugs/alcohol",
-        "icon": "wineglass.png"
+        "factor_name": "alcohol",
+        "icon": "0x1F378"
     },
     {
         "id": 12,
+        "factor_name": "drugs",
+        "icon": "0x1F48A"
+    },
+    {
+        "id": 13,
         "factor_name": "work",
-        "icon": "work.png"
+        "icon": "0x1F4BC"
     }
 ]

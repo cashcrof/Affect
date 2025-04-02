@@ -1,7 +1,7 @@
 import Button from "../../components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, {useState, useEffect} from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Image, StyleSheet, Text, Pressable, View } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, schedulePushNotification } from "../../components/Push";
@@ -14,7 +14,7 @@ Notifications.setNotificationHandler({
     }),
 });
 
-export default function Log({setPage}) {
+export default function Log({ setPage }) {
 
     const today = new Date();
     today.setDate(today.getDate() + 1);
@@ -28,18 +28,18 @@ export default function Log({setPage}) {
         registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-        setNotification(notification);
+            setNotification(notification);
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        console.log(response);
+            console.log(response);
         });
 
         return () => {
-        Notifications.removeNotificationSubscription(notificationListener.current);
-        Notifications.removeNotificationSubscription(responseListener.current);
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
         };
-    }, []);   
+    }, []);
 
 
     const onChange = (event, selectedDate) => {
@@ -49,7 +49,7 @@ export default function Log({setPage}) {
     };
 
     const onSetReminder = async () => {
-        await schedulePushNotification(date).finally(() => 
+        await schedulePushNotification(date).finally(() =>
             console.log("Reminder set"),
             setPage("Go")
         );
@@ -60,8 +60,8 @@ export default function Log({setPage}) {
         <SafeAreaView style={styles.container}>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>When would you like to log your mood?</Text>
-                <DateTimePicker 
-                    display = "spinner"
+                <DateTimePicker
+                    display="spinner"
                     testID="dateTimePicker"
                     value={date}
                     mode="time"
@@ -69,10 +69,10 @@ export default function Log({setPage}) {
                     onChange={onChange}
                 />
             </View>
-            <TouchableOpacity style={styles.button} onPress={() => onSetReminder()}>
+            <Pressable style={styles.button} onPress={() => onSetReminder()}>
                 <Text style={styles.buttonText}>Set Reminder</Text>
-            </TouchableOpacity>
-            <Button text="Skip" setPage={setPage} nextPage="Go"/>
+            </Pressable>
+            <Button text="Skip" setPage={setPage} nextPage="Go" />
         </SafeAreaView>
     );
 }
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         fontFamily: "Avenir",
         width: 350,
     },
-      button: {
+    button: {
         borderRadius: 20,         // Rounded border
         borderWidth: 2,           // 2 point border widht
         backgroundColor: '#232F3B',   // White colored border

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity} from 'react-native';
+import { Image, StyleSheet, Text, View, Dimensions, Pressable } from 'react-native';
 import Button from '../../components/Button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function Go({setOnboarded}) {
+export default function Go({ setOnboarded }) {
 
     const onDone = () => {
         setOnboarded(true);
@@ -14,14 +14,14 @@ export default function Go({setOnboarded}) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image style={styles.image} source={require('../../assets/affect.png')}/>
+            <Image style={styles.image} source={require('../../assets/affect.png')} />
             <View style={styles.textContainer}>
                 <Text style={styles.title}>that's it!</Text>
                 <Text style={styles.sub}>you're all set up. ready to start?</Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={() => onDone()}>
+            <Pressable style={styles.button} onPress={() => onDone()}>
                 <Text style={styles.buttonText}>Let's Go</Text>
-            </TouchableOpacity>
+            </Pressable>
         </SafeAreaView>
     )
 }
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: "Avenir",
     },
-          button: {
+    button: {
         borderRadius: 20,         // Rounded border
         borderWidth: 2,           // 2 point border widht
         backgroundColor: '#232F3B',   // White colored border

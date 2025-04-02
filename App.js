@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableHighlight, Pressable, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as SplashScreen from 'expo-splash-screen';
@@ -65,40 +65,40 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={MyTheme} onReady={onLayoutRootView}>
-        {!onboarded ?  <Onboarding setOnboarded={setOnboarded} /> :
-        <>
-          <Tab.Navigator initialRouteName='Home' screenOptions={({route}) => ({
-            tabBarShowLabel: false,
-            tabBarIcon: ({focused, color, size}) => {
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = focused ? 'ios-home' : 'ios-home-outline';
-              } else if (route.name === 'Stats') {
-                iconName = focused ? 'ios-analytics' : 'ios-analytics-outline';
-              } else if (route.name === 'Add') {
-                iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
-              } else if (route.name === 'Calendar') {
-                iconName = focused ? 'ios-calendar' : 'ios-calendar-outline';
-              } else if (route.name === 'Settings') {
-                iconName = focused ? 'ios-settings' : 'ios-settings-outline';
+        {!onboarded ? <Onboarding setOnboarded={setOnboarded} /> :
+          <>
+            <Tab.Navigator initialRouteName='Home' screenOptions={({ route }) => ({
+              tabBarShowLabel: false,
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                if (route.name === 'Home') {
+                  iconName = focused ? 'home' : 'home-outline';
+                } else if (route.name === 'Stats') {
+                  iconName = focused ? 'analytics' : 'analytics-outline';
+                } else if (route.name === 'Add') {
+                  iconName = focused ? 'add-circle' : 'add-circle-outline';
+                } else if (route.name === 'Calendar') {
+                  iconName = focused ? 'calendar' : 'calendar-outline';
+                } else if (route.name === 'Settings') {
+                  iconName = focused ? 'settings' : 'settings-outline';
+                }
+                return <Ionicons name={iconName} size={size} color={color} />;
               }
-              return <Ionicons name={iconName} size={size} color={color}/>;
-            }
-          })}>
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name = "Stats" component={StatsScreen}/>
-            <Tab.Screen name = "Add" component={NewEntryScreen} options={({navigation}) => ({
-              tabBarButton: (props) => (
-                  <TouchableOpacity style={styles.add} onPress={()=> navigation.navigate('Add')}>
-                    <Ionicons style={styles.plusSign} name="ios-add" size={50} color={"white"}/>
-                  </TouchableOpacity>
-              )
-            })}/>
-            <Tab.Screen name="Calendar" component={CalendarScreen}/>
-            <Tab.Screen name = "Settings" component={SettingsScreen}/>
-          </Tab.Navigator>
-          <StatusBar style="auto" />
-        </>
+            })}>
+              <Tab.Screen name="Home" component={HomeScreen} />
+              <Tab.Screen name="Stats" component={StatsScreen} />
+              <Tab.Screen name="Add" component={NewEntryScreen} options={({ navigation }) => ({
+                tabBarButton: (props) => (
+                  <Pressable style={styles.add} onPress={() => navigation.navigate('Add')}>
+                    <Ionicons style={styles.plusSign} name="add-circle" size={70} color={"#475F69"} />
+                  </Pressable>
+                )
+              })} />
+              <Tab.Screen name="Calendar" component={CalendarScreen} />
+              <Tab.Screen name="Settings" component={SettingsScreen} />
+            </Tab.Navigator>
+            <StatusBar style="auto" />
+          </>
         }
       </NavigationContainer>
     </SafeAreaProvider>
@@ -112,16 +112,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   add: {
-    backgroundColor: '#475F69',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
   plusSign: {
     position: 'absolute',
-    top: "5%",
-    left: "10%",
   },
 });

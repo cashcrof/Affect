@@ -1,70 +1,83 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Dimensions, Text, Image, TouchableOpacity} from "react-native";
-import moods from "../../moods.json"
+import React from "react";
+import { StyleSheet, View, Text, Pressable } from "react-native";
+import moods from "../../moods.json";
 
-
-
-export default function Mood({mood, setMood, setPage}) {
-    return (
-        <View style={styles.wrapper}>
-            <Text style={styles.text}>How are you feeling?</Text>
-            <View style={styles.container}>
-                {moods.map((mood, i) => {
-                    const imagePath = '../../assets/moods/' + mood.mood_image;
-                    console.log(imagePath);
-                    return (
-                        <TouchableOpacity style={styles.textContainer} key={i} onPress={setMood(mood)}>
-                            <Image source={{uri: imagePath}} />
-                            <Text style={styles.label}>{mood.mood_name}</Text>
-                        </TouchableOpacity>
-                    )
-                })}
-            </View>
-            <TouchableOpacity onPress={useEffect(() => {setPage("Factors")})}>
-                <Text>Next</Text>
-            </TouchableOpacity>
-        </View>
-    )
+export default function Mood({ mood, onChangeMood }) {
+	return (
+		<View styles={styles.wrapper}>
+			<Text style={styles.text}>How are you feeling?</Text>
+			<View style={styles.container}>
+				{moods.map((moodData) => {
+					return (
+						<Pressable
+							style={[
+								styles.textContainer,
+								{
+									backgroundColor:
+										moodData.id == mood.id ? "lightgrey" : "transparent",
+								},
+							]}
+							key={moodData.id}
+							onPress={() => {
+								onChangeMood(moodData);
+							}}
+						>
+							<Text style={styles.emoji}>
+								{String.fromCodePoint(moodData.mood_image)}
+							</Text>
+							<Text style={styles.label}>{moodData.mood_name}</Text>
+						</Pressable>
+					);
+				})}
+			</View>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 4,
-        flexWrap: "wrap",
-        flexDirection: "row",
-        backgroundColor: "#FFFFFF",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        paddingTop: 10,
-    },
-    text: {
-        color: "#232F3B",
-        fontSize: 30,
-        fontWeight: "light",
-        fontFamily: "Avenir",
-        textAlign: "center",
-        margin: 10,
-    },
-    textContainer: {
-        width: "25%",
-        height: "25%",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    wrapper: {
-        flex: 1,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        padding: 30,
-    },
-    label: {
-        color: "#232F3B",
-        fontSize: 11,
-        fontWeight: "light",
-        fontFamily: "Avenir",
-        textAlign: "center",
-    }
+	container: {
+		flexWrap: "wrap",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		margin: 20,
+	},
+	text: {
+		color: "#232F3B",
+		fontSize: 30,
+		fontWeight: "light",
+		fontFamily: "Avenir",
+		textAlign: "center",
+		margin: 10,
+		paddingTop: "25%",
+	},
+	textContainer: {
+		width: "25%",
+		height: "25%",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "",
+	},
+	wrapper: {
+		flex: 1,
+		flexDirection: "column",
+		alignItems: "center",
+	},
+	label: {
+		color: "#232F3B",
+		fontSize: 11,
+		fontWeight: "light",
+		fontFamily: "Avenir",
+		textAlign: "center",
+	},
+	emoji: {
+		fontSize: 50,
+	},
+	buttonText: {
+		color: "#232F3B",
+		fontWeight: "bold",
+		fontFamily: "Avenir",
+		fontSize: 20,
+		textAlign: "center",
+	},
 });

@@ -1,14 +1,14 @@
 import { Component } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, Pressable, View } from "react-native";
 
 export default class Button extends Component {
-      render({ setPage } = this.props) {
+  render({ setPage } = this.props) {
     return (
-      <TouchableOpacity onPress={() => setPage(this.props.nextPage)}>
+      <Pressable onPress={() => setPage(this.props.nextPage)}>
         <View style={styles.button}>
           <Text style={styles.text}>{this.props.text}</Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 }
