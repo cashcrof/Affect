@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import moods from "../../moods.json";
+import moods from "../../data/moods.json";
 
 export default function Mood({ mood, onChangeMood }) {
 	return (
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		margin: 20,
 	},
 	text: {
 		color: "#232F3B",
@@ -48,15 +47,12 @@ const styles = StyleSheet.create({
 		fontWeight: "light",
 		fontFamily: "Avenir",
 		textAlign: "center",
-		margin: 10,
-		paddingTop: "25%",
 	},
 	textContainer: {
 		width: "25%",
-		height: "25%",
+		height: "33%",
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "",
 	},
 	wrapper: {
 		flex: 1,
@@ -65,7 +61,7 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		color: "#232F3B",
-		fontSize: 11,
+		fontSize: 15,
 		fontWeight: "light",
 		fontFamily: "Avenir",
 		textAlign: "center",

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import factorObjects from "../../factors.json";
+import factorObjects from "../../data/factors.json";
 import { Pressable } from "react-native";
 
 export default function Mood({ factors, onChangeFactors }) {
@@ -38,14 +38,10 @@ export default function Mood({ factors, onChangeFactors }) {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 4,
 		flexWrap: "wrap",
 		flexDirection: "row",
-		backgroundColor: "#FFFFFF",
 		alignItems: "center",
 		justifyContent: "center",
-		overflow: "hidden",
-		paddingTop: 10,
 	},
 	text: {
 		color: "#232F3B",
@@ -53,29 +49,33 @@ const styles = StyleSheet.create({
 		fontWeight: "light",
 		fontFamily: "Avenir",
 		textAlign: "center",
-		margin: 10,
 	},
 	textContainer: {
 		width: "25%",
-		height: "20%",
+		height: "25%",
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	wrapper: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		flexDirection: "column",
 		alignItems: "center",
-		justifyContent: "center",
-		overflow: "hidden",
 	},
 	label: {
 		color: "#232F3B",
-		fontSize: 14,
+		fontSize: 15,
 		fontWeight: "light",
 		fontFamily: "Avenir",
 		textAlign: "center",
 	},
 	emoji: {
 		fontSize: 50,
+	},
+	buttonText: {
+		color: "#232F3B",
+		fontWeight: "bold",
+		fontFamily: "Avenir",
+		fontSize: 20,
+		textAlign: "center",
 	},
 });

@@ -87,9 +87,9 @@ export default function App() {
             })}>
               <Tab.Screen name="Home" component={HomeScreen} />
               <Tab.Screen name="Stats" component={StatsScreen} />
-              <Tab.Screen name="Add" component={NewEntryScreen} options={({ navigation }) => ({
+              <Tab.Screen name="New Entry" component={NewEntryScreen} options={({ navigation }) => ({
                 tabBarButton: (props) => (
-                  <Pressable style={styles.add} onPress={() => navigation.navigate('Add')}>
+                  <Pressable style={styles.add} onPress={() => navigation.navigate('New Entry')}>
                     <Ionicons style={styles.plusSign} name="add-circle" size={70} color={"#475F69"} />
                   </Pressable>
                 )

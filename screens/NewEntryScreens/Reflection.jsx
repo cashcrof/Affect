@@ -1,40 +1,37 @@
-import React, { useState } from "react";
-import {
-	StyleSheet,
-	View,
-	Dimensions,
-	Text,
-	Touchable,
-	Pressable,
-	TextInput,
-} from "react-native";
+import React from "react";
+import { StyleSheet, View, Text, TextInput, ScrollView } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function Reflection({ reflection, onChangeReflection }) {
-	const [showJournal, setShowJournal] = useState(false);
-
+export default function Reflection({
+	reflection,
+	showJournal,
+	onChangeReflection,
+}) {
 	return (
 		<>
 			{!showJournal ? (
 				<View style={styles.container}>
-					<Text>Would you like to write a journal reflection?</Text>
-					<Ionicons name="book" />
-					<Text>Reflections can help you better understand your mood.</Text>
-					<Pressable onPress={() => setShowJournal(true)}>
-						<Text>Yes, I'd like to reflect</Text>
-					</Pressable>
-					<Pressable>
-						<Text>No, I'm done</Text>
-					</Pressable>
+					<Text style={styles.text}>
+						Would you like to write a journal reflection?{" "}
+					</Text>
+					<Ionicons size={100} name="book" />
+					<Text style={styles.subtitleText}>
+						Reflections can help you better understand your mood.
+					</Text>
 				</View>
 			) : (
-				<View>
-					<Text>Add a reflection</Text>
-					<TextInput
-						value={reflection}
-						onChangeText={(reflection) => onChangeReflection(reflection)}
-						placeholder="Begin your reflection"
-					/>
+				<View style={styles.reflectionContainer}>
+					<Text style={styles.text}>Add a reflection</Text>
+					<View style={{ height: "60%" }}>
+						<TextInput
+							style={styles.reflection}
+							multiline
+							numberOfLines={10}
+							value={reflection}
+							onChangeText={(reflection) => onChangeReflection(reflection)}
+							placeholder="Begin your reflection"
+						/>
+					</View>
 				</View>
 			)}
 		</>
@@ -43,16 +40,54 @@ export default function Reflection({ reflection, onChangeReflection }) {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		backgroundColor: "#FFFFFF",
+		flexWrap: "wrap",
+		flexDirection: "column",
 		alignItems: "center",
-		justifyContent: "center",
-		overflow: "hidden",
+		justifyContent: "space-around",
+		height: "75%",
 	},
 	text: {
 		color: "#232F3B",
 		fontSize: 30,
+		fontWeight: "light",
+		fontFamily: "Avenir",
+		textAlign: "center",
+	},
+	textContainer: {
+		width: "25%",
+		height: "25%",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	wrapper: {
+		flex: 1,
+		flexDirection: "column",
+		alignItems: "center",
+	},
+	label: {
+		color: "#232F3B",
+		fontSize: 15,
+		fontWeight: "light",
+		fontFamily: "Avenir",
+		textAlign: "center",
+	},
+	emoji: {
+		fontSize: 50,
+	},
+	buttonText: {
+		color: "#232F3B",
 		fontWeight: "bold",
 		fontFamily: "Avenir",
+		fontSize: 20,
+		textAlign: "center",
+	},
+	reflectionContainer: {
+		height: "50%",
+		width: "100%",
+		flex: true,
+		gap: "10%",
+	},
+	reflection: {
+		fontSize: 18,
 	},
 });
