@@ -3,11 +3,12 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import { useState } from "react";
 
 export default function TimelineTile({ props, toggleReflection }) {
+	const parsedFactors = JSON.parse(props.factors);
 	const [expanded, setExpanded] = useState(false);
-	const [factors, setFactors] = useState(props.factors.slice(0, 3));
+	const [factors, setFactors] = useState(parsedFactors.slice(0, 3));
 
 	const toggleExpanded = (val) => {
-		setFactors(val ? props.factors : props.factors.slice(0, 3));
+		setFactors(val ? parsedFactors : parsedFactors.slice(0, 3));
 		setExpanded(val);
 	};
 
@@ -24,15 +25,13 @@ export default function TimelineTile({ props, toggleReflection }) {
 	return (
 		<Pressable style={styles.tileBg} onPress={() => toggleExpanded(!expanded)}>
 			<View style={styles.emojiContainer}>
-				<Text style={styles.emoji}>
-					{String.fromCodePoint(props.mood.mood_image)}
-				</Text>
+				<Text style={styles.emoji}>{String.fromCodePoint(props.emoji)}</Text>
 			</View>
 
 			<View>
 				<Text style={styles.dateText}>{formattedDate}</Text>
 				<Text style={styles.dateText}>{formattedTime}</Text>
-				<Text style={styles.moodText}>{props.mood.mood_name}</Text>
+				<Text style={styles.moodText}>{props.mood_name}</Text>
 				<View style={styles.factorsContainer}>
 					{factors.map((factor, i) => {
 						return (
@@ -44,14 +43,26 @@ export default function TimelineTile({ props, toggleReflection }) {
 						);
 					})}
 				</View>
-				{expanded && props.reflection && (
-					<Pressable
-						style={styles.reflectionButton}
-						onPress={() => toggleReflection(props.date)}
-					>
-						<Text style={{ fontSize: 20, color: "grey" }}>view reflection</Text>
-					</Pressable>
-				)}
+				{expanded &&
+					(props.reflection ? (
+						<Pressable
+							style={styles.reflectionButton}
+							onPress={() => toggleReflection(props.id)}
+						>
+							<Text style={{ fontSize: 20, color: "grey" }}>
+								view reflection
+							</Text>
+						</Pressable>
+					) : (
+						<Text
+							style={[
+								styles.reflectionButton,
+								{ fontSize: 20, color: "#232F3B" },
+							]}
+						>
+							no reflection
+						</Text>
+					))}
 			</View>
 			<IonIcon
 				style={{
@@ -69,7 +80,7 @@ export default function TimelineTile({ props, toggleReflection }) {
 const styles = StyleSheet.create({
 	tileBg: {
 		backgroundColor: "lightgrey",
-		marginVertical: 20,
+		marginVertical: 10,
 		borderRadius: 30,
 		display: "flex",
 		flexDirection: "row",
@@ -102,6 +113,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		width: 190,
 		gap: "5",
+		paddingBottom: 10,
 	},
 	reflectionButton: {
 		marginVertical: 20,

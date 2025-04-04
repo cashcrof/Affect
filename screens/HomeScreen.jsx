@@ -10,8 +10,10 @@ import {
 import { useEffect, useState } from "react";
 import StorageComponent from "../components/Storage";
 import TimelineTile from "../components/TimelineTile";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function HomeScreen({ navigation }) {
+	const db = useSQLiteContext();
 	const [entries, setEntries] = useState([]);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [showReflection, setShowReflection] = useState(false);
@@ -25,9 +27,9 @@ export default function HomeScreen({ navigation }) {
 		}, 2000);
 	}, []);
 
-	const toggleReflection = (date) => {
-		console.log(date);
-		const entry = entries.find((element) => element.date == date);
+	const toggleReflection = (id) => {
+		console.log(id);
+		const entry = entries.find((element) => element.id == id);
 		if (entry) {
 			const formattedDate = new Date(entry.date).toLocaleDateString("en-us", {
 				weekday: "long",
@@ -46,11 +48,17 @@ export default function HomeScreen({ navigation }) {
 	};
 
 	useEffect(() => {
-		StorageComponent.getAllDataForKey("moodEntry").then((moodEntries) => {
+		async function setup() {
+			console.log("setup");
+			const moodEntries = await db.getAllAsync(
+				`SELECT * FROM mood_entries LEFT JOIN moods on mood_entries.mood = moods.id;`
+			);
 			setEntries(moodEntries);
-			console.log(entries);
-		});
+			console.log(moodEntries);
+		}
+		setup();
 	}, [refreshing]);
+
 	return !showReflection ? (
 		<View style={{ backgroundColor: "white", padding: 20, height: "100%" }}>
 			<Text style={styles.text}>your moods</Text>
@@ -93,12 +101,12 @@ export default function HomeScreen({ navigation }) {
 				>
 					<Text style={styles.dateText}>{formattedDate}</Text>
 					<Text style={styles.dateText}>
-						{activeEntry && activeEntry.mood.mood_name}
+						{activeEntry && activeEntry.mood_name}
 					</Text>
 				</View>
 				<View style={{ flex: true, flexDirection: "row" }}>
 					{activeEntry &&
-						activeEntry.factors.map((factor, i) => {
+						JSON.parse(activeEntry.factors).map((factor, i) => {
 							return (
 								<View key={i} style={styles.factor}>
 									<Text style={{ fontSize: 20 }}>

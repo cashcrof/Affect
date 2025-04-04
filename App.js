@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TouchableHighlight, Pressable, View } from 'react-native';
+import { StyleSheet, Pressable, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as SplashScreen from 'expo-splash-screen';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import Onboarding from './screens/Onboarding';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -13,6 +13,7 @@ import NewEntryScreen from './screens/NewEntryScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { openDatabaseSync, SQLiteProvider } from 'expo-sqlite';
 
 const Tab = createBottomTabNavigator();
 SplashScreen.preventAutoHideAsync();
@@ -20,7 +21,6 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [onboarded, setOnboarded] = useState(false);
-  const [entries, setEntries] = useState(false)
 
   const MyTheme = {
     dark: false,
@@ -63,47 +63,119 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer theme={MyTheme} onReady={onLayoutRootView}>
-        {!onboarded ? <Onboarding setOnboarded={setOnboarded} /> :
-          <>
-            <Tab.Navigator initialRouteName='Home' screenOptions={({ route }) => ({
-              tabBarShowLabel: false,
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
-                if (route.name === 'Home') {
-                  iconName = focused ? 'home' : 'home-outline';
-                } else if (route.name === 'Stats') {
-                  iconName = focused ? 'analytics' : 'analytics-outline';
-                } else if (route.name === 'Add') {
-                  iconName = focused ? 'add-circle' : 'add-circle-outline';
-                } else if (route.name === 'Calendar') {
-                  iconName = focused ? 'calendar' : 'calendar-outline';
-                } else if (route.name === 'Settings') {
-                  iconName = focused ? 'settings' : 'settings-outline';
+    <SQLiteProvider
+      databaseName={"affect.db"}
+      options={{ enableChangeListener: true }}
+      onInit={migrateDbIfNeeded}
+    >
+      <SafeAreaProvider>
+        <NavigationContainer theme={MyTheme} onReady={onLayoutRootView}>
+          {!onboarded ? <Onboarding setOnboarded={setOnboarded} /> :
+            <>
+              <Tab.Navigator initialRouteName='Home' screenOptions={({ route }) => ({
+                tabBarShowLabel: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+                  if (route.name === 'Home') {
+                    iconName = focused ? 'home' : 'home-outline';
+                  } else if (route.name === 'Stats') {
+                    iconName = focused ? 'analytics' : 'analytics-outline';
+                  } else if (route.name === 'Add') {
+                    iconName = focused ? 'add-circle' : 'add-circle-outline';
+                  } else if (route.name === 'Calendar') {
+                    iconName = focused ? 'calendar' : 'calendar-outline';
+                  } else if (route.name === 'Settings') {
+                    iconName = focused ? 'settings' : 'settings-outline';
+                  }
+                  return <Ionicons name={iconName} size={size} color={color} />;
                 }
-                return <Ionicons name={iconName} size={size} color={color} />;
-              }
-            })}>
-              <Tab.Screen name="Home" component={HomeScreen} />
-              <Tab.Screen name="Stats" component={StatsScreen} />
-              <Tab.Screen name="New Entry" component={NewEntryScreen} options={({ navigation }) => ({
-                tabBarButton: (props) => (
-                  <Pressable style={styles.add} onPress={() => navigation.navigate('New Entry')}>
-                    <Ionicons style={styles.plusSign} name="add-circle" size={70} color={"#475F69"} />
-                  </Pressable>
-                )
-              })} />
-              <Tab.Screen name="Calendar" component={CalendarScreen} />
-              <Tab.Screen name="Settings" component={SettingsScreen} />
-            </Tab.Navigator>
-            <StatusBar style="auto" />
-          </>
-        }
-      </NavigationContainer>
-    </SafeAreaProvider>
+              })}>
+                <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="Stats" component={StatsScreen} />
+                <Tab.Screen name="New Entry" component={NewEntryScreen} options={({ navigation }) => ({
+                  tabBarButton: (props) => (
+                    <Pressable style={styles.add} onPress={() => navigation.navigate('New Entry')}>
+                      <Ionicons style={styles.plusSign} name="add-circle" size={70} color={"#475F69"} />
+                    </Pressable>
+                  )
+                })} />
+                <Tab.Screen name="Calendar" component={CalendarScreen} />
+                <Tab.Screen name="Settings" component={SettingsScreen} />
+              </Tab.Navigator>
+              <StatusBar style="auto" />
+            </>
+          }
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </SQLiteProvider>
   );
 }
+
+async function migrateDbIfNeeded(db) {
+  const DATABASE_VERSION = 1;
+  let { currentDbVersion } = await db.getFirstAsync(
+    'PRAGMA user_version'
+  );
+
+  console.log("db version" + currentDbVersion);
+  if (currentDbVersion >= DATABASE_VERSION) {
+    return;
+  }
+  if (!currentDbVersion) {
+    await db.execAsync(`
+      PRAGMA journal_mode = 'wal';
+      DROP TABLE IF EXISTS moods;
+      DROP TABLE IF EXISTS factors;
+      CREATE TABLE IF NOT EXISTS factors (id INTEGER PRIMARY KEY NOT NULL, factor_name TEXT NOT NULL, emoji INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS moods (id INTEGER PRIMARY KEY NOT NULL, mood_name TEXT NOT NULL, emoji INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS factors (id INTEGER PRIMARY KEY NOT NULL, factor_name TEXT NOT NULL, emoji INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS mood_entries (id INTEGER PRIMARY KEY NOT NULL, date TIMESTAMP NOT NULL DEFAULT current_timestamp, mood INT REFERENCES mood(id), factors TEXT NOT NULL, reflection TEXT);
+    `);
+    const moodInsertStatement = await db.prepareAsync(
+      'INSERT INTO moods(mood_name, emoji) VALUES ($moodName, $emoji)'
+    );
+    const factorInsertStatement = await db.prepareAsync(
+      'INSERT INTO factors (factor_name, emoji) VALUES ($factorName, $emoji)'
+    );
+    try {
+      let result = await moodInsertStatement.executeAsync({ $moodName: "happy", $emoji: "0x1F600" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "sad", $emoji: "0x1F622" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "angry", $emoji: "0x1F621" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "calm", $emoji: "0x1F610" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "excited", $emoji: "0x1F929" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "anxious", $emoji: "0x1F628" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "okay", $emoji: "0x1FAE4" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "bored", $emoji: "0x1F971" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "tired", $emoji: "0x1F634" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "overwhelmed", $emoji: "0x1FAE8" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "stressed", $emoji: "0x1F4A8" });
+      result = await moodInsertStatement.executeAsync({ $moodName: "lonely", $emoji: "0x1F972" });
+    } finally {
+      await moodInsertStatement.finalizeAsync();
+    }
+    try {
+      let result = await factorInsertStatement.executeAsync({ $factorName: "leisure", $emoji: "0x1F9D8" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "social", $emoji: "0x1F465" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "relationship", $emoji: "0x2764" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "sex", $emoji: "0x1F4A6" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "money", $emoji: "0x1F4B5" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "exercise", $emoji: "0x1F3C3" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "health", $emoji: "0x1FA7A" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "sleep", $emoji: "0x1F4A4" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "screen time", $emoji: "0x1F4F1" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "food", $emoji: "0x1F354" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "alcohol", $emoji: "0x1F378" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "drugs", $emoji: "0x1F48A" });
+      result = await factorInsertStatement.executeAsync({ $factorName: "work", $emoji: "0x1F4BC" });
+    } finally {
+      await factorInsertStatement.finalizeAsync();
+    }
+    currentDbVersion = 1;
+  }
+
+  await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
+}
+
 
 const styles = StyleSheet.create({
   container: {

@@ -14,9 +14,11 @@ import Mood from "./NewEntryScreens/Mood";
 import Factors from "./NewEntryScreens/Factors";
 import Reflection from "./NewEntryScreens/Reflection";
 import StorageComponent from "../components/Storage";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function NewEntryScreen({ navigation }) {
-	const [mood, setMood] = useState("");
+	const db = useSQLiteContext();
+	const [mood, setMood] = useState(0);
 	const date = new Date();
 	const [factors, setFactors] = useState(new Array());
 	const [reflection, setReflection] = useState("");
@@ -41,22 +43,41 @@ export default function NewEntryScreen({ navigation }) {
 		});
 	}, []);
 
+	// const addNewEntry = async () => {
+	// 	let id = date.toUTCString();
+	// 	try {
+	// 		const newEntry = {
+	// 			mood: mood,
+	// 			date: date,
+	// 			factors: factors,
+	// 			reflection: reflection,
+	// 		};
+
+	// 		StorageComponent.save({
+	// 			key: "moodEntry",
+	// 			id: id,
+	// 			data: newEntry,
+	// 			expires: null,
+	// 		});
+	// 		clearCurrent();
+	// 		navigation.navigate("Home");
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		clearCurrent();
+	// 		navigation.navigate("Home", { error: error });
+	// 	}
+	// };
+
 	const addNewEntry = async () => {
 		let id = date.toUTCString();
 		try {
-			const newEntry = {
-				mood: mood,
-				date: date,
-				factors: factors,
-				reflection: reflection,
-			};
-
-			StorageComponent.save({
-				key: "moodEntry",
-				id: id,
-				data: newEntry,
-				expires: null,
-			});
+			const result = await db.runAsync(
+				"INSERT INTO mood_entries (mood, factors, reflection) VALUES (?, ?, ?)",
+				mood,
+				JSON.stringify(factors),
+				reflection
+			);
+			console.log(result.lastInsertRowId, result.changes);
 			clearCurrent();
 			navigation.navigate("Home");
 		} catch (error) {
@@ -66,8 +87,8 @@ export default function NewEntryScreen({ navigation }) {
 		}
 	};
 
-	const onChangeMood = (moodData) => {
-		setMood(moodData);
+	const onChangeMood = (moodId) => {
+		setMood(moodId);
 	};
 
 	const onChangeFactors = (newFactor) => {

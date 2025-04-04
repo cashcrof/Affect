@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import moods from "../../data/moods.json";
+// import moods from "../../data/moods.json";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function Mood({ mood, onChangeMood }) {
+	const db = useSQLiteContext();
+	const [moods, setMoods] = useState([]);
+
+	useEffect(() => {
+		async function setup() {
+			const result = await db.getAllAsync("SELECT * FROM moods");
+			console.log("moods::" + Object.values(result[0]));
+			setMoods(result);
+		}
+		setup();
+	}, []);
+
 	return (
 		<View styles={styles.wrapper}>
 			<Text style={styles.text}>How are you feeling?</Text>
@@ -14,16 +27,16 @@ export default function Mood({ mood, onChangeMood }) {
 								styles.textContainer,
 								{
 									backgroundColor:
-										moodData.id == mood.id ? "lightgrey" : "transparent",
+										moodData.id == mood ? "lightgrey" : "transparent",
 								},
 							]}
 							key={moodData.id}
 							onPress={() => {
-								onChangeMood(moodData);
+								onChangeMood(moodData.id);
 							}}
 						>
 							<Text style={styles.emoji}>
-								{String.fromCodePoint(moodData.mood_image)}
+								{String.fromCodePoint(moodData.emoji)}
 							</Text>
 							<Text style={styles.label}>{moodData.mood_name}</Text>
 						</Pressable>
@@ -50,7 +63,6 @@ const styles = StyleSheet.create({
 	},
 	textContainer: {
 		width: "25%",
-		height: "33%",
 		alignItems: "center",
 		justifyContent: "center",
 	},
