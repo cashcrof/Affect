@@ -15,19 +15,19 @@ export default class Button extends Component {
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 20,         // Rounded border
-    borderWidth: 2,           // 2 point border widht
-    backgroundColor: '#232F3B',   // White colored border
-    paddingHorizontal: 50,    // Horizontal padding
-    paddingVertical: 15,      // Vertical padding
+    borderRadius: 20, // Rounded border
+    borderWidth: 2, // 2 point border widht
+    backgroundColor: "#232F3B", // White colored border
+    paddingHorizontal: 50, // Horizontal padding
+    paddingVertical: 15, // Vertical padding
     width: 300,
   },
   // Button text
   text: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontFamily: 'Avenir',
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontFamily: "Avenir",
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

@@ -2,15 +2,15 @@ import { View, Text, Pressable } from "react-native";
 import StorageComponent from "../components/Storage";
 
 export default function SettingsScreen() {
-	const clearStorage = () => {
-		StorageComponent.clearMap();
-	};
-	return (
-		<View>
-			<Text>Settings Screen</Text>
-			<Pressable onPress={() => clearStorage()}>
-				<Text style={{ fontSize: 50, margin: 50 }}>Clear</Text>
-			</Pressable>
-		</View>
-	);
+  const clearStorage = () => {
+    StorageComponent.clearMap();
+  };
+  return (
+    <View>
+      <Text>Settings Screen</Text>
+      <Pressable onPress={() => clearStorage()}>
+        <Text style={{ fontSize: 50, margin: 50 }}>Clear</Text>
+      </Pressable>
+    </View>
+  );
 }

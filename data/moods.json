@@ -1,74 +1,74 @@
 [
-    {
-        "id": 1,
-        "mood_name": "happy",
-        "mood_image": "0x1F600",
-        "value": 1.0
-    },
-    {
-        "id": 2,
-        "mood_name": "sad",
-        "mood_image": "0x1F622",
-        "value": 0.0
-    },
-    {
-        "id": 3,
-        "mood_name": "angry",
-        "mood_image": "0x1F621",
-        "value": 0.0
-    },
-    {
-        "id": 4,
-        "mood_name": "calm",
-        "mood_image": "0x1F610",
-        "value": 1.0
-    },
-    {
-        "id": 5,
-        "mood_name": "excited",
-        "mood_image": "0x1F929",
-        "value": 0.75
-    },
-    {
-        "id": 6,
-        "mood_name": "anxious",
-        "mood_image": "0x1F628",
-        "value": 0.25
-    },
-    {
-        "id": 7,
-        "mood_name": "okay",
-        "mood_image": "0x1FAE4",
-        "value": 0.5
-    },
-    {
-        "id": 8,
-        "mood_name": "bored",
-        "mood_image": "0x1F971",
-        "value": 0.5
-    },
-    {
-        "id": 9,
-        "mood_name": "tired",
-        "mood_image": "0x1F634",
-        "value": 0.25
-    },
-    {
-        "id": 10,
-        "mood_name": "overwhelmed",
-        "mood_image": "0x1FAE8",
-        "value": 0.25
-    },
-    {
-        "id": 11,
-        "mood_name": "stressed",
-        "mood_image": "0x1F4A8",
-        "value": 0.0
-    },
-    {
-        "id": 12,
-        "mood_name": "lonely",
-        "mood_image": "0x1F972",
-        "value": 0.0
-    }
+  {
+    "id": 1,
+    "mood_name": "happy",
+    "mood_image": "0x1F600",
+    "value": 1.0
+  },
+  {
+    "id": 2,
+    "mood_name": "sad",
+    "mood_image": "0x1F622",
+    "value": 0.0
+  },
+  {
+    "id": 3,
+    "mood_name": "angry",
+    "mood_image": "0x1F621",
+    "value": 0.0
+  },
+  {
+    "id": 4,
+    "mood_name": "calm",
+    "mood_image": "0x1F610",
+    "value": 1.0
+  },
+  {
+    "id": 5,
+    "mood_name": "excited",
+    "mood_image": "0x1F929",
+    "value": 0.75
+  },
+  {
+    "id": 6,
+    "mood_name": "anxious",
+    "mood_image": "0x1F628",
+    "value": 0.25
+  },
+  {
+    "id": 7,
+    "mood_name": "okay",
+    "mood_image": "0x1FAE4",
+    "value": 0.5
+  },
+  {
+    "id": 8,
+    "mood_name": "bored",
+    "mood_image": "0x1F971",
+    "value": 0.5
+  },
+  {
+    "id": 9,
+    "mood_name": "tired",
+    "mood_image": "0x1F634",
+    "value": 0.25
+  },
+  {
+    "id": 10,
+    "mood_name": "overwhelmed",
+    "mood_image": "0x1FAE8",
+    "value": 0.25
+  },
+  {
+    "id": 11,
+    "mood_name": "stressed",
+    "mood_image": "0x1F4A8",
+    "value": 0.0
+  },
+  {
+    "id": 12,
+    "mood_name": "lonely",
+    "mood_image": "0x1F972",
+    "value": 0.0
+  }
 ]
