@@ -8,7 +8,6 @@ import {
   Pressable,
 } from "react-native";
 import { useEffect, useState } from "react";
-import StorageComponent from "../components/Storage";
 import TimelineTile from "../components/TimelineTile";
 import { useSQLiteContext } from "expo-sqlite";
 
@@ -110,7 +109,7 @@ export default function HomeScreen({ navigation }) {
               return (
                 <View key={i} style={styles.factor}>
                   <Text style={{ fontSize: 20 }}>
-                    {String.fromCodePoint(factor.icon)}
+                    {String.fromCodePoint(factor.emoji)}
                   </Text>
                 </View>
               );

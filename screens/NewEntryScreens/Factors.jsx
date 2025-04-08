@@ -1,16 +1,28 @@
-import React, { useEffect } from "react";
+import { useSQLiteContext } from "expo-sqlite";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import factorObjects from "../../data/factors.json";
+// import factorObjects from "../../data/factors.json";
 import { Pressable } from "react-native";
 
 export default function Mood({ factors, onChangeFactors }) {
+  const db = useSQLiteContext();
+  const [factorsObject, setFactorObjects] = useState([]);
+
+  useEffect(() => {
+    async function setup() {
+      const result = await db.getAllAsync("SELECT * FROM factors");
+      setFactorObjects(result);
+    }
+    setup();
+  }, []);
   return (
     <View style={styles.wrapper}>
       <Text style={styles.text}>
         What factors contributed to your mood today?
       </Text>
       <View style={styles.container}>
-        {factorObjects.map((factor, i) => {
+        {factorsObject.map((factor, i) => {
+          console.log(factor);
           return (
             <Pressable
               style={[
@@ -25,7 +37,7 @@ export default function Mood({ factors, onChangeFactors }) {
               onPress={() => onChangeFactors(factor)}
             >
               <Text style={styles.emoji}>
-                {String.fromCodePoint(factor.icon)}
+                {String.fromCodePoint(factor.emoji)}
               </Text>
               <Text style={styles.label}>{factor.factor_name}</Text>
             </Pressable>
