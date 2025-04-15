@@ -27,7 +27,6 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const toggleReflection = (id) => {
-    console.log(id);
     const entry = entries.find((element) => element.id == id);
     if (entry) {
       const formattedDate = new Date(entry.date).toLocaleDateString("en-us", {
@@ -48,12 +47,10 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     async function setup() {
-      console.log("setup");
       const moodEntries = await db.getAllAsync(
         `SELECT * FROM mood_entries LEFT JOIN moods on mood_entries.mood = moods.id;`,
       );
       setEntries(moodEntries);
-      console.log(moodEntries);
     }
     setup();
   }, [refreshing]);

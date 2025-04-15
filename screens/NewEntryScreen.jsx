@@ -48,7 +48,6 @@ export default function NewEntryScreen({ navigation }) {
         JSON.stringify(factors),
         reflection,
       );
-      console.log(result.lastInsertRowId, result.changes);
       clearCurrent();
       navigation.navigate("Home");
     } catch (error) {
@@ -65,7 +64,6 @@ export default function NewEntryScreen({ navigation }) {
   const onChangeFactors = (newFactor) => {
     if (!factors.includes(newFactor)) {
       const newFactors = [...factors, newFactor];
-      console.log("newFactors: " + newFactors);
       setFactors(newFactors);
     } else if (factors.includes(newFactor)) {
       const index = factors.indexOf(newFactor);

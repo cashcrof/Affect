@@ -10,7 +10,6 @@ export default function Mood({ mood, onChangeMood }) {
   useEffect(() => {
     async function setup() {
       const result = await db.getAllAsync("SELECT * FROM moods");
-      console.log("moods::" + Object.values(result[0]));
       setMoods(result);
     }
     setup();

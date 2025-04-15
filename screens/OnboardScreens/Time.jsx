@@ -52,7 +52,6 @@ export default function Log({ setPage }) {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
-    console.log(currentDate);
   };
 
   const onSetReminder = async () => {

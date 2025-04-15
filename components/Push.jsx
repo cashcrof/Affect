@@ -3,7 +3,6 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
 export async function schedulePushNotification(trigger_time) {
-  console.log("Scheduling notification");
   const time_difference = trigger_time - new Date();
 
   await Notifications.scheduleNotificationAsync({
@@ -17,8 +16,6 @@ export async function schedulePushNotification(trigger_time) {
       repeats: true,
     },
   });
-
-  console.log("Notification scheduled");
 }
 
 export async function registerForPushNotificationsAsync() {
@@ -46,7 +43,6 @@ export async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     alert("Must use physical device for Push Notifications");
   }

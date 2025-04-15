@@ -22,7 +22,6 @@ export default function Mood({ factors, onChangeFactors }) {
       </Text>
       <View style={styles.container}>
         {factorsObject.map((factor, i) => {
-          console.log(factor);
           return (
             <Pressable
               style={[

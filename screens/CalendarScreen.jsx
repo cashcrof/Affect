@@ -8,14 +8,20 @@ import {
   ScrollView,
 } from "react-native";
 import { Calendar, CalendarUtils } from "react-native-calendars";
+import { getCalendarDateString } from "react-native-calendars/src/services";
 
 export default function CalendarScreen() {
   const db = useSQLiteContext();
   const [entries, setEntries] = useState([]);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [activeDate, setActiveDate] = useState(new Date());
   const [activeEntry, setActiveEntry] = useState(
-    entries.filter((entry) => entry.date == activeDate),
+    entries.filter(
+      (entry) =>
+        getCalendarDateString(entry.date) == getCalendarDateString(new Date()),
+    )[0],
+  );
+  const [activeDate, setActiveDate] = useState(
+    getCalendarDateString(new Date()),
   );
   const [markedDateObjects, setMarkedDateObjects] = useState(new Object());
   const [refreshing, setRefreshing] = React.useState(false);
@@ -29,12 +35,10 @@ export default function CalendarScreen() {
 
   useEffect(() => {
     async function setup() {
-      console.log("setup");
       const moodEntries = await db.getAllAsync(
         `SELECT * FROM mood_entries LEFT JOIN moods on mood_entries.mood = moods.id;`,
       );
       setEntries(moodEntries);
-      console.log(moodEntries);
     }
     setup();
   }, [month, refreshing]);
@@ -51,21 +55,29 @@ export default function CalendarScreen() {
     setMarkedDateObjects(marked);
   }, [entries]);
 
-  useEffect(() => {
+  const openDateEntry = (date) => {
     const newActiveEntry = entries.filter((entry) => {
-      new Date(entry.date) === activeDate;
-    });
+      const entryDate = getCalendarDateString(new Date(entry.date));
+      return entryDate === date.dateString;
+    })[0];
 
-    setActiveEntry(newActiveEntry);
-  }, [activeDate]);
+    console.log(newActiveEntry);
+
+    if (newActiveEntry) {
+      setActiveEntry(newActiveEntry);
+    } else {
+      setActiveDate(date.dateString);
+      setActiveEntry(null);
+    }
+  };
 
   function formatDateEntry(entry) {
     const ratingColors = {
-      0: "#393B57",
-      1: "#9C495D",
-      2: "#E2894D",
-      3: "#EEBB79",
-      4: "#F7E074",
+      0: "#F94144",
+      1: "#F3722C",
+      2: "#F9C74F",
+      3: "#90BE6D",
+      4: "#43AA8B",
     };
     return {
       [CalendarUtils.getCalendarDateString(entry.date)]: {
@@ -93,11 +105,19 @@ export default function CalendarScreen() {
         style={styles.calendar}
         maxDate={new Date().toDateString()}
         onMonthChange={(date) => setMonth(date.month)}
-        onDayPress={(date) => setActiveDate(date)}
+        onDayPress={(date) => openDateEntry(date)}
         markingType={"custom"}
         markedDates={markedDateObjects}
       />
-      <Text>{activeEntry}</Text>
+      <Text style={styles.text}>
+        {activeEntry ? getCalendarDateString(activeEntry.date) : activeDate}
+      </Text>
+      <Text style={styles.text}>
+        {activeEntry ? activeEntry.mood_name : "no mood entry"}
+      </Text>
+      <Text style={styles.text}>
+        {activeEntry && String.fromCodePoint(activeEntry && activeEntry.emoji)}
+      </Text>
     </ScrollView>
   );
 }
@@ -114,12 +134,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#232F3B",
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontWeight: "thin",
     fontFamily: "Avenir",
   },
   calendar: {
     width: 350,
-    height: 500,
+    height: 400,
   },
 });

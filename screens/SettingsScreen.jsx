@@ -9,7 +9,6 @@ export default function SettingsScreen() {
       const result = await db.runAsync("DELETE FROM mood_entries", {
         $value: "aaa",
       });
-      console.log(result.changes);
     } catch (error) {
       console.log(error);
     }
