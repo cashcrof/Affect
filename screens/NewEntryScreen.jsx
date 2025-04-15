@@ -1,7 +1,6 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  View,
   Text,
   Pressable,
   KeyboardAvoidingView,
@@ -13,13 +12,11 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import Mood from "./NewEntryScreens/Mood";
 import Factors from "./NewEntryScreens/Factors";
 import Reflection from "./NewEntryScreens/Reflection";
-import StorageComponent from "../components/Storage";
 import { useSQLiteContext } from "expo-sqlite";
 
 export default function NewEntryScreen({ navigation }) {
   const db = useSQLiteContext();
   const [mood, setMood] = useState(0);
-  const date = new Date();
   const [factors, setFactors] = useState(new Array());
   const [reflection, setReflection] = useState("");
   const [page, setPage] = useState("Mood");
@@ -43,33 +40,7 @@ export default function NewEntryScreen({ navigation }) {
     });
   }, []);
 
-  // const addNewEntry = async () => {
-  // 	let id = date.toUTCString();
-  // 	try {
-  // 		const newEntry = {
-  // 			mood: mood,
-  // 			date: date,
-  // 			factors: factors,
-  // 			reflection: reflection,
-  // 		};
-
-  // 		StorageComponent.save({
-  // 			key: "moodEntry",
-  // 			id: id,
-  // 			data: newEntry,
-  // 			expires: null,
-  // 		});
-  // 		clearCurrent();
-  // 		navigation.navigate("Home");
-  // 	} catch (error) {
-  // 		console.log(error);
-  // 		clearCurrent();
-  // 		navigation.navigate("Home", { error: error });
-  // 	}
-  // };
-
   const addNewEntry = async () => {
-    let id = date.toUTCString();
     try {
       const result = await db.runAsync(
         "INSERT INTO mood_entries (mood, factors, reflection) VALUES (?, ?, ?)",
@@ -77,7 +48,6 @@ export default function NewEntryScreen({ navigation }) {
         JSON.stringify(factors),
         reflection,
       );
-      console.log(result.lastInsertRowId, result.changes);
       clearCurrent();
       navigation.navigate("Home");
     } catch (error) {
@@ -94,7 +64,6 @@ export default function NewEntryScreen({ navigation }) {
   const onChangeFactors = (newFactor) => {
     if (!factors.includes(newFactor)) {
       const newFactors = [...factors, newFactor];
-      console.log("newFactors: " + newFactors);
       setFactors(newFactors);
     } else if (factors.includes(newFactor)) {
       const index = factors.indexOf(newFactor);

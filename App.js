@@ -78,6 +78,7 @@ export default function App() {
                 initialRouteName="Home"
                 screenOptions={({ route }) => ({
                   tabBarShowLabel: false,
+                  headerTitleStyle: { color: "transparent" },
                   tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
                     if (route.name === "Home") {
@@ -143,13 +144,13 @@ async function migrateDbIfNeeded(db) {
       PRAGMA journal_mode = 'wal';
       DROP TABLE IF EXISTS moods;
       DROP TABLE IF EXISTS factors;
-      CREATE TABLE IF NOT EXISTS factors (id INTEGER PRIMARY KEY NOT NULL, factor_name TEXT NOT NULL, emoji INTEGER NOT NULL);
-      CREATE TABLE IF NOT EXISTS moods (id INTEGER PRIMARY KEY NOT NULL, mood_name TEXT NOT NULL, emoji INTEGER NOT NULL);
+      DROP TABLE IF EXISTS mood_entries;
+      CREATE TABLE IF NOT EXISTS moods (id INTEGER PRIMARY KEY NOT NULL, mood_name TEXT NOT NULL, emoji INTEGER NOT NULL, rating INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS factors (id INTEGER PRIMARY KEY NOT NULL, factor_name TEXT NOT NULL, emoji INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS mood_entries (id INTEGER PRIMARY KEY NOT NULL, date TIMESTAMP NOT NULL DEFAULT current_timestamp, mood INT REFERENCES mood(id), factors TEXT NOT NULL, reflection TEXT);
     `);
     const moodInsertStatement = await db.prepareAsync(
-      "INSERT INTO moods(mood_name, emoji) VALUES ($moodName, $emoji)",
+      "INSERT INTO moods(mood_name, emoji, rating) VALUES ($moodName, $emoji, $rating)",
     );
     const factorInsertStatement = await db.prepareAsync(
       "INSERT INTO factors (factor_name, emoji) VALUES ($factorName, $emoji)",
@@ -158,50 +159,62 @@ async function migrateDbIfNeeded(db) {
       let result = await moodInsertStatement.executeAsync({
         $moodName: "happy",
         $emoji: "0x1F600",
+        $rating: 4
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "sad",
         $emoji: "0x1F622",
+        $rating: 0
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "angry",
         $emoji: "0x1F621",
+        $rating: 0
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "calm",
         $emoji: "0x1F610",
+        $rating: 3
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "excited",
         $emoji: "0x1F929",
+        $rating: 4
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "anxious",
         $emoji: "0x1F628",
+        $rating: 1
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "okay",
         $emoji: "0x1FAE4",
+        $rating: 2
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "bored",
         $emoji: "0x1F971",
+        $rating: 2
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "tired",
         $emoji: "0x1F634",
+        $rating: 1
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "overwhelmed",
-        $emoji: "0x1FAE8",
+        $emoji: "0x1fae0",
+        $rating: 1
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "stressed",
         $emoji: "0x1F4A8",
+        $rating: 0
       });
       result = await moodInsertStatement.executeAsync({
         $moodName: "lonely",
         $emoji: "0x1F972",
+        $rating: 1
       });
     } finally {
       await moodInsertStatement.finalizeAsync();
@@ -265,6 +278,13 @@ async function migrateDbIfNeeded(db) {
     currentDbVersion = 1;
   }
 
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-02 19:56:32", 1, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-04 19:56:32", 2, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-06 19:56:32", 3, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-08 19:56:32", 4, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-09 19:56:32", 5, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-10 19:56:32", 6, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
+  await db.execAsync(`INSERT INTO mood_entries(date, mood, factors, reflection) VALUES ("2025-04-11 19:56:32", 7, '[{"id":2,"factor_name":"social","emoji":"0x1F465"},{"id":6,"factor_name":"exercise","emoji":"0x1F3C3"},{"id":7,"factor_name":"health","emoji":"0x1FA7A"},{"id":12,"factor_name":"drugs","emoji":"0x1F48A"}]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");`);
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 

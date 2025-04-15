@@ -37,7 +37,7 @@ export default function TimelineTile({ props, toggleReflection }) {
             return (
               <View key={i} style={styles.factor}>
                 <Text style={{ fontSize: 35 }}>
-                  {String.fromCodePoint(factor.icon)}
+                  {String.fromCodePoint(factor.emoji)}
                 </Text>
               </View>
             );
@@ -68,7 +68,7 @@ export default function TimelineTile({ props, toggleReflection }) {
         style={{
           textAlign: "left",
           color: expanded ? "#232F3B" : "grey",
-          marginLeft: 15,
+          paddingLeft: "8%",
         }}
         size={30}
         name={expanded ? "caret-up-outline" : "caret-down-outline"}
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     display: "flex",
     flexDirection: "row",
+    justifyContent: "space-between",
     padding: 10,
     maxWidth: "100%",
   },
@@ -97,13 +98,13 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: "grey",
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: "light",
     fontFamily: "Avenir",
   },
   moodText: {
     color: "#232F3B",
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "light",
     fontFamily: "Avenir",
   },
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexWrap: "wrap",
     flexDirection: "row",
-    width: 190,
+    maxWidth: 150,
     gap: "5",
     paddingBottom: 10,
   },
